@@ -1,0 +1,14 @@
+.hexbox {
+  background: var(--ant-color-fill-quaternary);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 8px 0 0;
+  font-family: "Cascadia Mono", Consolas, ui-monospace, monospace;
+  max-height: 220px;
+  overflow: auto;
+}
+.hexbox.err { color: var(--ant-color-error); }

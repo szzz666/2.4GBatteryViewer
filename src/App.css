@@ -1,0 +1,49 @@
+/* Ant Design 负责全部视觉；这里只保留窗口级布局与透明背景处理 */
+
+html, body, #root {
+  margin: 0;
+  height: 100%;
+  font-family: "Segoe UI", "Microsoft YaHei UI", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+body { overflow: hidden; }
+
+.app { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+.app > * { min-height: 0; }
+.ant-flex { min-height: 0; }
+
+/* 悬浮框 / 任务栏是 transparent 窗口：整条链路都不能铺底色，否则半透明失效 */
+.app-float, .app-taskbar { background: transparent; }
+html:has(.app-float), body:has(.app-float), html:has(.app-float) #root,
+html:has(.app-taskbar), body:has(.app-taskbar), html:has(.app-taskbar) #root {
+  background: transparent !important;
+}
+
+.mono {
+  font-family: "Cascadia Mono", "Consolas", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 错误 / 低电量提示（antd message 之外的行内兜底） */
+.toast {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #7f1d1d;
+  color: #fff;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-size: 12px;
+  max-width: 80%;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+.toast.warn { background: #92400e; bottom: 60px; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.35); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
