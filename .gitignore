@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Rust / Tauri 构建产物（体积很大，绝不能进仓库）
+src-tauri/target
+src-tauri/gen/schemas
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
