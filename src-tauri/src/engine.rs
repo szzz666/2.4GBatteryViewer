@@ -35,6 +35,7 @@ pub struct Shared {
 }
 
 #[derive(Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct SnapshotEvent {
     pub devices: Vec<DeviceSnapshot>,
     pub scanning: bool,

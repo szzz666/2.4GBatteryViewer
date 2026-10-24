@@ -158,6 +158,7 @@ battery-viewer.exe --silent    # 只驻留托盘（开机自启用）
 | 任务栏药丸跑到屏幕顶部 | `relayout()` 还在用「子窗口相对父窗口」的坐标，`SetParent` 早就去掉了 | 统一改用屏幕坐标 `dock_rect()`（读 `Shell_TrayWnd` / `TrayNotifyWnd`） |
 | 双击图标没反应 | 单实例检测到已有进程就静默退出 | 弹一个提示框告诉用户程序已在托盘运行 |
 | 开机自启后小窗不见了 | `--silent` 把整个 restore 流程也跳过了 | `--silent` 只隐藏主面板，任务栏药丸与悬浮框照常恢复 |
+| **任务栏电量不刷新** | 三个问题叠在一起：① `capabilities/default.json` 的 `windows` 只有 panel/float/debug，任务栏窗口的 `plugin:event\|listen` 被 ACL 拒绝，广播全被丢掉；② `SnapshotEvent` 没写 `serde(rename_all = "camelCase")`，前端拿到的是 `refreshed_at`，按 `refreshedAt` 比时间永远相等；③ `Taskbar.tsx` 用的是 `own ?? outer`，self 轮询一旦赋值 outer 就被永久屏蔽 | ① 能力表补上 `taskbar`；② 快照结构体加 camelCase 序列化；③ 改成按 `refreshedAt` 取两者中更新的一份（`useMemo`） |
 
 ## 托盘图标与任务栏按钮
 

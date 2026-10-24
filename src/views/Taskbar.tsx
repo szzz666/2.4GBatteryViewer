@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ThunderboltFilled } from "@ant-design/icons";
 import { api, onSnapshot } from "../api";
 import { deviceIcon } from "../icons";
@@ -72,7 +72,17 @@ export function Taskbar({ snapshot: outer, settings }: Props) {
     };
   }, []);
 
-  const snapshot = own ?? outer;
+  // 取"更新的一份"：自己轮询到的快照只用于窗口刚建好、还没收到广播时的占位；
+  // 一旦主窗口把更新的快照推下来（outer），必须立刻改用 outer。
+  // 以前写的是 `own ?? outer`——own 一旦被首轮轮询赋值就不再为 null，
+  // outer 的后续更新被永久屏蔽，药丸电量就永远停在打开那一刻的数字上。
+  const snapshot = useMemo(() => {
+    if (!own) return outer;
+    if (!outer) return own;
+    const a = outer.refreshedAt ?? 0;
+    const b = own.refreshedAt ?? 0;
+    return a >= b ? outer : own;
+  }, [own, outer]);
   const devices = pickDevices(snapshot?.devices ?? [], settings.taskbarDevices ?? []);
   const allHidden =
     (snapshot?.devices ?? []).length > 0 &&
